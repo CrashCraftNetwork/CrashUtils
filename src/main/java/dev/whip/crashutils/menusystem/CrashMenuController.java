@@ -6,15 +6,29 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
 public class CrashMenuController implements Listener {
+    private final Plugin plugin;
+
+    public CrashMenuController(Plugin plugin){
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent e){
         if (e.getCurrentItem() == null)
             return;
 
         if (e.getInventory().getHolder() instanceof CrashGuiHolder){
-            GUI gui = ((CrashGuiHolder) e.getInventory().getHolder()).getManager();
+            CrashGuiHolder holder = ((CrashGuiHolder) e.getInventory().getHolder());
+
+            if (!holder.getPlugin().equals(plugin)){
+                return;
+            }
+
+            GUI gui = holder.getManager();
+
             if (gui.isLockGUI()){
                 e.setCancelled(true);
             }

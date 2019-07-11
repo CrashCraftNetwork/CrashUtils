@@ -1,5 +1,6 @@
 package dev.whip.crashutils.menusystem;
 
+import dev.whip.crashutils.CrashUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -10,11 +11,14 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
 public abstract class GUI {
+    private static final Plugin plugin = CrashUtils.getPlugin();
+
     private String title;
     private int slots;
 
@@ -37,7 +41,7 @@ public abstract class GUI {
         this.slots = slots;
         this.player = player;
 
-        CrashGuiHolder guiHolder = new CrashGuiHolder(player, this);
+        CrashGuiHolder guiHolder = new CrashGuiHolder(player, this, plugin);
         inv = Bukkit.createInventory(guiHolder, slots, title);
         guiHolder.setInventory(inv);
     }
