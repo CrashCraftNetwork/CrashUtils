@@ -29,6 +29,8 @@ public class CrashMenuController implements Listener {
 
             GUI gui = holder.getManager();
 
+            gui.rawInventoryClickEvent(e);
+
             if (gui.isLockGUI()){
                 e.setCancelled(true);
             }

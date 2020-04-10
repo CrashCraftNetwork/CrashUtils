@@ -1,4 +1,4 @@
-package net.crashcraft.menu.defaultmenus;
+package dev.whip.crashutils.menusystem.defaultmenus;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;

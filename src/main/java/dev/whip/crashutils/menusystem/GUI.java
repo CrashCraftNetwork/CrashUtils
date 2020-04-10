@@ -54,6 +54,10 @@ public abstract class GUI {
         }
     }
 
+    public void rawInventoryClickEvent(InventoryClickEvent e){
+
+    }
+
     public void setupGUI(){
         initialize();
         loadItems();
