@@ -1,5 +1,7 @@
 package dev.whip.crashutils;
 
+import dev.whip.crashutils.Payment.PaymentProvider;
+import dev.whip.crashutils.Payment.ProcessorManager;
 import dev.whip.crashutils.menusystem.CrashMenuController;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Listener;
@@ -14,6 +16,10 @@ public class CrashUtils implements Listener {
 
     public void setupMenuSubSystem(){
         Bukkit.getServer().getPluginManager().registerEvents(new CrashMenuController(plugin), plugin);     //Gui controller
+    }
+
+    public ProcessorManager setupPaymentProvider(PaymentProvider provider){
+        return new ProcessorManager(plugin, provider);
     }
 
     public static JavaPlugin getPlugin() {
