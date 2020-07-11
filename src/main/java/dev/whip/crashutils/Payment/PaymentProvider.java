@@ -1,6 +1,7 @@
 package dev.whip.crashutils.Payment;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public interface PaymentProvider {
     String getProviderIdentifier();
@@ -9,7 +10,7 @@ public interface PaymentProvider {
 
     void setup() throws ProviderInitializationException;
 
-    TransactionRecipe makeTransaction(UUID user, TransactionType type, String comment, double amount);
+    void makeTransaction(UUID user, TransactionType type, String comment, double amount, Consumer<TransactionRecipe> callback);
 
-    double getBalance(UUID user);
+    void getBalance(UUID user, Consumer<Double> callback);
 }

@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.UUID;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class VaultPaymentProvider implements PaymentProvider {
     private Economy economy;
@@ -28,14 +30,15 @@ public class VaultPaymentProvider implements PaymentProvider {
     public void setup() throws ProviderInitializationException {
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
 
-        if (rsp == null)
+        if (rsp == null) {
             throw new ProviderInitializationException();
+        }
 
         economy = rsp.getProvider();
     }
 
     @Override
-    public TransactionRecipe makeTransaction(UUID user, TransactionType type, String comment, double amount) {
+    public void makeTransaction(UUID user, TransactionType type, String comment, double amount, Consumer<TransactionRecipe> callback) {
         EconomyResponse response = null;
 
         switch (type){
@@ -47,18 +50,20 @@ public class VaultPaymentProvider implements PaymentProvider {
                 break;
         }
 
-        if (response == null)
-            return new TransactionRecipe(user, amount, comment, "Vault response is null");
+        if (response == null) {
+            callback.accept(new TransactionRecipe(user, amount, comment, "Vault response is null"));
+            return;
+        }
 
         if (response.transactionSuccess()) {
-            return new TransactionRecipe(user, amount, comment);
+            callback.accept(new TransactionRecipe(user, amount, comment));
         } else {
-            return new TransactionRecipe(user, amount, comment, response.errorMessage);
+            callback.accept(new TransactionRecipe(user, amount, comment, response.errorMessage));
         }
     }
 
     @Override
-    public double getBalance(UUID user) {
-        return economy.getBalance(Bukkit.getOfflinePlayer(user));
+    public void getBalance(UUID user, Consumer<Double> callback) {
+        callback.accept(economy.getBalance(Bukkit.getOfflinePlayer(user)));
     }
 }

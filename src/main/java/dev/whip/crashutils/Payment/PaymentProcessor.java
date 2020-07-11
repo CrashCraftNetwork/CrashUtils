@@ -1,35 +1,32 @@
 package dev.whip.crashutils.Payment;
 
 import java.util.UUID;
+import java.util.function.Consumer;
 
 public class PaymentProcessor {
-    private PaymentProvider provider;
+    private final PaymentProvider provider;
 
-    PaymentProcessor(PaymentProvider provider){
+    PaymentProcessor(PaymentProvider provider) throws ProviderInitializationException {
         if (provider == null || !provider.checkRequirements())
             throw new RuntimeException("Payment processor aws null or failed requirements");
 
         this.provider = provider;
 
-        try {
-            provider.setup();
-        } catch (ProviderInitializationException e){
-            e.printStackTrace();
-        }
+        provider.setup();
     }
 
-    public TransactionRecipe makeTransaction(UUID user, TransactionType type, String comment, double amount){
+    public void makeTransaction(UUID user, TransactionType type, String comment, double amount, Consumer<TransactionRecipe> callback){
         if (amount == 0){
-            return new TransactionRecipe(user, amount, "Payment Processor Requirement Check", "Transaction amount cannot be 0");
+            callback.accept(new TransactionRecipe(user, amount, "Payment Processor Requirement Check", "Transaction amount cannot be 0"));
         }
-        return provider.makeTransaction(user, type, comment, amount);
+        provider.makeTransaction(user, type, comment, amount, callback);
     }
 
-    public TransactionRecipe makeTransaction(UUID user, String comment, double amount){
-        return makeTransaction(user, amount > 0 ? TransactionType.DEPOSIT : TransactionType.WITHDRAW, comment, amount);
+    public void makeTransaction(UUID user, String comment, double amount, Consumer<TransactionRecipe> callback){
+        makeTransaction(user, amount > 0 ? TransactionType.DEPOSIT : TransactionType.WITHDRAW, comment, amount, callback);
     }
 
-    public double getBalance(UUID user){
-        return provider.getBalance(user);
+    public void getBalance(UUID user, Consumer<Double> callback){
+        provider.getBalance(user, callback);
     }
 }
