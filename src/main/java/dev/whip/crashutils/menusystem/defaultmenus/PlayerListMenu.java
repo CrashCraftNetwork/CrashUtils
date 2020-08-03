@@ -15,12 +15,12 @@ import java.util.function.BiFunction;
 
 public class PlayerListMenu extends GUI {
     private int page = 1;
-    private GUI previousMenu;
-    private BiMap<UUID, String> lookupMap = HashBiMap.create();
-    private ArrayList<UUID> arrayList;
-    private BiFunction<Player, UUID, String> function;
+    private final GUI previousMenu;
+    private final BiMap<UUID, String> lookupMap = HashBiMap.create();
+    private final ArrayList<UUID> arrayList;
+    private final BiFunction<GUI, UUID, String> function;
 
-    public PlayerListMenu(Player player, GUI previousMenu, ArrayList<UUID> arrayList, BiFunction<Player, UUID, String> function){
+    public PlayerListMenu(Player player, GUI previousMenu, ArrayList<UUID> arrayList, BiFunction<GUI, UUID, String> function){
         super(player,"Select Player", 54);
         this.previousMenu = previousMenu;
         this.arrayList = arrayList;
@@ -95,7 +95,7 @@ public class PlayerListMenu extends GUI {
                 break;
             default:
                 if (event.getCurrentItem().getType() == Material.PLAYER_HEAD) {
-                    function.apply(getPlayer(), lookupMap.inverse().get(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName())));
+                    function.apply(this, lookupMap.inverse().get(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName())));
                 }
                 break;
         }

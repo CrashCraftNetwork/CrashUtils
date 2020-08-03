@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public abstract class GUI {
@@ -97,7 +98,7 @@ public abstract class GUI {
 
     // -- ItemUtils --
 
-    public static ItemStack createGuiItem(String name, ArrayList<String> desc, Material mat) {
+    public static ItemStack createGuiItem(String name, List<String> desc, Material mat) {
         ItemStack i = new ItemStack(mat, 1);
         ItemMeta iMeta = i.getItemMeta();
         iMeta.setDisplayName(name);
@@ -114,7 +115,7 @@ public abstract class GUI {
         return i;
     }
 
-    public static ItemStack createPlayerHead(OfflinePlayer player, String name, ArrayList<String> desc) {
+    public static ItemStack createPlayerHead(OfflinePlayer player, String name, List<String> desc) {
         ItemStack item = createGuiItem(player.getName(), desc, Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
         meta.setOwningPlayer(player);
