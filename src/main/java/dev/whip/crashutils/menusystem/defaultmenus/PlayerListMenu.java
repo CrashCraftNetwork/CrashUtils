@@ -2,14 +2,18 @@ package dev.whip.crashutils.menusystem.defaultmenus;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import dev.whip.crashutils.CrashUtils;
 import dev.whip.crashutils.menusystem.GUI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
@@ -45,16 +49,27 @@ public class PlayerListMenu extends GUI {
     public void loadItems() {
         inv.clear();
 
-        int slot = 10;
-        for (UUID uuid : getPageFromArray()){
-            while ((slot%9)<1 || (slot%9)>7){
+        Bukkit.getScheduler().runTaskAsynchronously(CrashUtils.getPlugin(), () -> {
+            HashMap<Integer, UUID> headMap = new HashMap<>();
+
+            int slot = 10;
+            for (UUID uuid : getPageFromArray()){
+                while ((slot%9)<1 || (slot%9)>7){
+                    slot++;
+                }
+
+                inv.setItem(slot, createGuiItem(lookupMap.get(uuid), Material.PLAYER_HEAD));
+                headMap.put(slot, uuid);
+
                 slot++;
             }
-
-            inv.setItem(slot, createPlayerHead(uuid, lookupMap.get(uuid), new ArrayList<>()));
-
-            slot++;
-        }
+            Bukkit.getScheduler().runTask(CrashUtils.getPlugin(), () -> {
+                for (Map.Entry<Integer, UUID> entry : headMap.entrySet()){
+                    UUID uuid = entry.getValue();
+                    inv.setItem(entry.getKey(), createPlayerHead(uuid, lookupMap.get(uuid)));
+                }
+            });
+        });
 
         //Controls
         if (page > 1) {
