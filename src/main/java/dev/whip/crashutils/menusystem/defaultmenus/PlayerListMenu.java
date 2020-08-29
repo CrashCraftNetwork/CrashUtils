@@ -63,11 +63,20 @@ public class PlayerListMenu extends GUI {
 
                 slot++;
             }
-            Bukkit.getScheduler().runTask(CrashUtils.getPlugin(), () -> {
+
+            Bukkit.getScheduler().runTaskAsynchronously(CrashUtils.getPlugin(), () -> {
+                HashMap<Integer, ItemStack> realHeadMap = new HashMap<>();
+
                 for (Map.Entry<Integer, UUID> entry : headMap.entrySet()){
                     UUID uuid = entry.getValue();
-                    inv.setItem(entry.getKey(), createPlayerHead(uuid, lookupMap.get(uuid)));
+                    realHeadMap.put(entry.getKey(), createPlayerHead(uuid, lookupMap.get(uuid)));
                 }
+
+                Bukkit.getScheduler().runTask(CrashUtils.getPlugin(), () -> {
+                    for (Map.Entry<Integer, ItemStack> entry : realHeadMap.entrySet()){
+                        inv.setItem(entry.getKey(), entry.getValue());
+                    }
+                });
             });
         });
 
