@@ -1,15 +1,18 @@
 package dev.whip.crashutils.menusystem.defaultmenus;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import dev.whip.crashutils.CrashUtils;
 import dev.whip.crashutils.menusystem.GUI;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,36 +52,50 @@ public class PlayerListMenu extends GUI {
     public void loadItems() {
         inv.clear();
 
-        Bukkit.getScheduler().runTaskAsynchronously(CrashUtils.getPlugin(), () -> {
-            HashMap<Integer, UUID> headMap = new HashMap<>();
+        HashMap<Integer, UUID> headMap = new HashMap<>();
 
-            int slot = 10;
-            for (UUID uuid : getPageFromArray()){
-                while ((slot%9)<1 || (slot%9)>7){
-                    slot++;
-                }
+        final boolean isPaper = PaperLib.isPaper();
 
-                inv.setItem(slot, createGuiItem(lookupMap.get(uuid), Material.PLAYER_HEAD));
-                headMap.put(slot, uuid);
-
+        int slot = 10;
+        for (UUID uuid : getPageFromArray()){
+            while ((slot%9)<1 || (slot%9)>7){
                 slot++;
             }
 
+            if (isPaper) {
+                inv.setItem(slot, createGuiItem(lookupMap.get(uuid), Material.PLAYER_HEAD));
+                headMap.put(slot, uuid);
+            } else {
+                inv.setItem(slot, createPlayerHead(uuid, lookupMap.get(uuid)));
+            }
+
+            slot++;
+        }
+
+        if (isPaper) {
             Bukkit.getScheduler().runTaskAsynchronously(CrashUtils.getPlugin(), () -> {
                 HashMap<Integer, ItemStack> realHeadMap = new HashMap<>();
 
-                for (Map.Entry<Integer, UUID> entry : headMap.entrySet()){
-                    UUID uuid = entry.getValue();
-                    realHeadMap.put(entry.getKey(), createPlayerHead(uuid, lookupMap.get(uuid)));
+                for (Map.Entry<Integer, UUID> entry : headMap.entrySet()) {
+                    PlayerProfile profile = Bukkit.createProfile(entry.getValue());
+
+                    if (profile.complete()) {
+                        ItemStack item = createGuiItem(profile.getName(), Material.PLAYER_HEAD);
+                        SkullMeta meta = (SkullMeta) item.getItemMeta();
+                        meta.setPlayerProfile(profile);
+                        item.setItemMeta(meta);
+
+                        realHeadMap.put(entry.getKey(), item);
+                    }
                 }
 
                 Bukkit.getScheduler().runTask(CrashUtils.getPlugin(), () -> {
-                    for (Map.Entry<Integer, ItemStack> entry : realHeadMap.entrySet()){
+                    for (Map.Entry<Integer, ItemStack> entry : realHeadMap.entrySet()) {
                         inv.setItem(entry.getKey(), entry.getValue());
                     }
                 });
             });
-        });
+        }
 
         //Controls
         if (page > 1) {
