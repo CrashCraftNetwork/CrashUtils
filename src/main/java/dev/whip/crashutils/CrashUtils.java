@@ -24,9 +24,13 @@ public class CrashUtils implements Listener {
     }
 
     public void setupTextureCache(){
-        if (textureCache == null){
-            textureCache = new TextureCache();
-            Bukkit.getServer().getPluginManager().registerEvents(textureCache, plugin);
+        if (PaperLib.isPaper()) {
+            if (textureCache == null) {
+                textureCache = new TextureCache();
+                Bukkit.getServer().getPluginManager().registerEvents(textureCache, plugin);
+            }
+        } else {
+            plugin.getLogger().severe("Your server is not running Paper or a Paper derivative, texture caching has not been enabled");
         }
     }
 

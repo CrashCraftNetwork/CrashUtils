@@ -54,7 +54,11 @@
                     <relocations>
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
-                            <shadedPattern>net.crashcraft.acf</shadedPattern>
+                            <shadedPattern>net.crashcraft.crashutil.acf</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>net.crashcraft.crashutil.paperlib</shadedPattern> <!-- Replace this -->
                         </relocation>
                     </relocations>
                 </configuration>

@@ -28,7 +28,9 @@ public class TextureCache implements Listener {
     public void onPreFillProfileEvent(PreFillProfileEvent e){
         if (!e.getPlayerProfile().hasTextures()){
             ProfileProperty profileProperty = cache.peek(e.getPlayerProfile().getId());
-            e.getPlayerProfile().setProperty(profileProperty);
+            if (profileProperty != null) {
+                e.getPlayerProfile().setProperty(profileProperty);
+            }
         }
     }
 //TODO make sure this works
