@@ -6,7 +6,7 @@
 
     <groupId>dev.whip</groupId>
     <artifactId>CrashUtils</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
 
     <build>
         <sourceDirectory>src/main/java</sourceDirectory>
@@ -59,6 +59,14 @@
                         <relocation>
                             <pattern>io.papermc.lib</pattern>
                             <shadedPattern>net.crashcraft.crashutil.paperlib</shadedPattern> <!-- Replace this -->
+                        </relocation>
+                        <relocation>
+                            <pattern>org.intellij</pattern>
+                            <shadedPattern>net.crashcraft.crashutil.intelij</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains</pattern>
+                            <shadedPattern>net.crashcraft.crashutil.jetbrains</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>

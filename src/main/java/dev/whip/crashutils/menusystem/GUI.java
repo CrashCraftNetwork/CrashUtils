@@ -1,6 +1,7 @@
 package dev.whip.crashutils.menusystem;
 
 import dev.whip.crashutils.CrashUtils;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -97,6 +98,15 @@ public abstract class GUI {
     }
 
     // -- ItemUtils --
+
+    public static ItemStack createGuiItem(BaseComponent[] name, List<BaseComponent[]> desc, Material mat) {
+        ItemStack i = new ItemStack(mat, 1);
+        ItemMeta iMeta = i.getItemMeta();
+        iMeta.setDisplayNameComponent(name);
+        iMeta.setLoreComponents(desc);
+        i.setItemMeta(iMeta);
+        return i;
+    }
 
     public static ItemStack createGuiItem(String name, List<String> desc, Material mat) {
         ItemStack i = new ItemStack(mat, 1);
