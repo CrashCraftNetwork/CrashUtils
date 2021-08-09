@@ -27,8 +27,8 @@ public class PlayerListMenu extends GUI {
     private final ArrayList<UUID> arrayList;
     private final BiFunction<GUI, UUID, String> function;
 
-    public PlayerListMenu(Player player, GUI previousMenu, ArrayList<UUID> arrayList, BiFunction<GUI, UUID, String> function){
-        super(player,"Select Player", 54);
+    public PlayerListMenu(String title, Player player, GUI previousMenu, ArrayList<UUID> arrayList, BiFunction<GUI, UUID, String> function){
+        super(player, title == null ? "Select Player" : title, 54);
         this.previousMenu = previousMenu;
         this.arrayList = arrayList;
         this.function = function;
