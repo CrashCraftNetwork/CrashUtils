@@ -78,12 +78,12 @@ public class ConfirmationMenu extends GUI {
 
     @Override
     public void onClick(InventoryClickEvent event, String rawItemName) {
-        switch (rawItemName){
-            case "accept":
+        switch (event.getSlot()){
+            case 33:
                 player.closeInventory();
                 function.apply(player, true);
                 break;
-            case "cancel":
+            case 29:
                 player.closeInventory();
                 function.apply(player, false);
                 break;
