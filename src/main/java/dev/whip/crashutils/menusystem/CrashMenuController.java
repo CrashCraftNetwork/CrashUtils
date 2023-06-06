@@ -3,6 +3,7 @@ package dev.whip.crashutils.menusystem;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +19,7 @@ public class CrashMenuController implements Listener {
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent e){
         if (e.getCurrentItem() == null)
-            return;
+            e.setCancelled(true);
 
         if (e.getInventory().getHolder() instanceof CrashGuiHolder){
             CrashGuiHolder holder = ((CrashGuiHolder) e.getInventory().getHolder());
@@ -32,6 +33,10 @@ public class CrashMenuController implements Listener {
             gui.rawInventoryClickEvent(e);
 
             if (gui.isLockGUI()){
+                e.setCancelled(true);
+            }
+
+            if (e.getClick() == ClickType.NUMBER_KEY){
                 e.setCancelled(true);
             }
 
