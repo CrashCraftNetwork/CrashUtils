@@ -28,15 +28,15 @@ public class CrashMenuController implements Listener {
                 return;
             }
 
+            if (holder.getPlugin().equals(plugin) && e.getClick() == ClickType.NUMBER_KEY){
+                e.setCancelled(true);
+            }
+
             GUI gui = holder.getManager();
 
             gui.rawInventoryClickEvent(e);
 
             if (gui.isLockGUI()){
-                e.setCancelled(true);
-            }
-
-            if (e.getClick() == ClickType.NUMBER_KEY){
                 e.setCancelled(true);
             }
 
