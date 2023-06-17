@@ -19,7 +19,7 @@ public class CrashMenuController implements Listener {
     @EventHandler
     public void onInventoryClickEvent(InventoryClickEvent e){
         if (e.getCurrentItem() == null)
-            e.setCancelled(true);
+            return;
 
         if (e.getInventory().getHolder() instanceof CrashGuiHolder){
             CrashGuiHolder holder = ((CrashGuiHolder) e.getInventory().getHolder());
