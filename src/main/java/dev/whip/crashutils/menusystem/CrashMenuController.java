@@ -28,7 +28,7 @@ public class CrashMenuController implements Listener {
                 return;
             }
 
-            if (holder.getPlugin().equals(plugin) && e.getClick() == ClickType.NUMBER_KEY){
+            if (e.getClick() == ClickType.NUMBER_KEY){
                 e.setCancelled(true);
             }
 
